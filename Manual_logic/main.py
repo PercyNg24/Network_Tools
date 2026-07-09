@@ -33,7 +33,7 @@ print(f"IP address is: {ip}")
 print(f"Subnet Mask is: {subnet_mask}")
 print(f"Network address is: {net}")
 print(f"Broadcast address is: {bcast}")
-print(f"Total addresses in subnet: {total}")1
+print(f"Total addresses in subnet: {total}")
 print(f"Usable hosts in subnet: {usable}")
 print(f"IP class: {get_ip_class(ip)}")
 
