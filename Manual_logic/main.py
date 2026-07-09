@@ -1,4 +1,4 @@
-from defined_function_subnet.define_function_subnet_cal_function import valid_ip_address, valid_subnet_mask, ip_to_binary, binary_to_ip, cidr_to_mask, calculate_network_address, calculate_broadcast_address, calculate_total_hosts, get_ip_class
+from def_ip import valid_ip_address, valid_subnet_mask, ip_to_binary, binary_to_ip, cidr_to_mask, calculate_network_address, calculate_broadcast_address, calculate_total_hosts, get_ip_class
 
 ip = input("Enter IP address:  ")
 if not valid_ip_address(ip):
@@ -18,20 +18,19 @@ if mask_input.isdigit():
         subnet_mask = input("Enter the Subnet Mask:  ")
 else:
     subnet_mask = mask_input
-
+192
 if valid_subnet_mask(subnet_mask) == False:
     print("Invalid Subnet Mask, Try again.")
     subnet_mask = input("Enter the Subnet Mask:  ")
 
-
+net = calculate_network_address(ip, subnet_mask)
+bcast = calculate_broadcast_address(ip, subnet_mask)
+total, usable = calculate_total_hosts(subnet_mask)
 
 
 
 print(f"IP address is: {ip}")
 print(f"Subnet Mask is: {subnet_mask}")
-net = calculate_network_address(ip, subnet_mask)
-bcast = calculate_broadcast_address(ip, subnet_mask)
-total, usable = calculate_total_hosts(subnet_mask)
 print(f"Network address is: {net}")
 print(f"Broadcast address is: {bcast}")
 print(f"Total addresses in subnet: {total}")
