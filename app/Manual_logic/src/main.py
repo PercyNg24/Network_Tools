@@ -1,4 +1,12 @@
-from def_ip import valid_ip_address, valid_subnet_mask, ip_to_binary, binary_to_ip, cidr_to_mask, calculate_network_address, calculate_broadcast_address, calculate_total_hosts, get_ip_class
+from function_def import (
+    calculate_broadcast_address,
+    calculate_network_address,
+    calculate_total_hosts,
+    cidr_to_mask,
+    get_ip_class,
+    valid_ip_address,
+    valid_subnet_mask,
+)
 
 ip = input("Enter IP address:  ")
 if not valid_ip_address(ip):
@@ -7,8 +15,7 @@ if not valid_ip_address(ip):
 # # Accept CIDR or dotted-decimal mask
 subnet_mask_input = input("Enter the Subnet Mask (dotted or CIDR like 24 or /24):  ")
 mask_input = subnet_mask_input.strip()
-if mask_input.startswith('/'):
-    mask_input = mask_input[1:]
+mask_input = mask_input.removeprefix('/')
 if mask_input.isdigit():
     cidr = int(mask_input)
     if 0 <= cidr <= 32:
@@ -18,7 +25,6 @@ if mask_input.isdigit():
         subnet_mask = input("Enter the Subnet Mask:  ")
 else:
     subnet_mask = mask_input
-192
 if valid_subnet_mask(subnet_mask) == False:
     print("Invalid Subnet Mask, Try again.")
     subnet_mask = input("Enter the Subnet Mask:  ")

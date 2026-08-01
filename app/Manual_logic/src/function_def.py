@@ -6,7 +6,7 @@
 # Phase 1 – Manual Logic
 # Validate IP and mask format. (192.168.1.1/24)
 def valid_ip_address(ip):   
-   
+
     octet = ip.split(".")           # splits ip address into each octet. It will split when seeing (".") and return a list of octets
     if len(octet) != 4:             # Using len() to check if the length of the list is 4, which is the required number of octets for a valid IP address.
         return False
