@@ -1,3 +1,5 @@
+import sys
+
 from function_def import (
     calculate_broadcast_address,
     calculate_network_address,
@@ -8,9 +10,15 @@ from function_def import (
     valid_subnet_mask,
 )
 
-ip = input("Enter IP address:  ")
-if not valid_ip_address(ip):
-    print("Invalid IP, Try again.")
+if len(sys.argv) > 1:                   # use input from CLI if user provide
+    ip = sys.argv[1] 
+else:
+    while True:
+        ip = input("Enter IP address:  ")
+        if valid_ip_address(ip):
+            break
+        print("Invalid IP, Try again.")
+            
 
 # # Accept CIDR or dotted-decimal mask
 subnet_mask_input = input("Enter the Subnet Mask (dotted or CIDR like 24 or /24):  ")
@@ -24,10 +32,13 @@ if mask_input.isdigit():
         print("Invalid CIDR value. Please enter 0-32.")
         subnet_mask = input("Enter the Subnet Mask:  ")
 else:
-    subnet_mask = mask_input
-if valid_subnet_mask(subnet_mask) == False:
-    print("Invalid Subnet Mask, Try again.")
-    subnet_mask = input("Enter the Subnet Mask:  ")
+    while True:
+        subnet_mask = mask_input
+        subnet_mask = input("Enter the Subnet Mask:  ")
+        if valid_subnet_mask(subnet_mask):
+            break
+        print("Invalid Subnet Mask, Try again.")
+
 
 net = calculate_network_address(ip, subnet_mask)
 bcast = calculate_broadcast_address(ip, subnet_mask)

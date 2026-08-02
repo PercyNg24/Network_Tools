@@ -1,9 +1,8 @@
-FROM python:3.13.14-trixie
-WORKDIR /app
+FROM python:3.13.14-slim
 
-ENV APP_PORT=8080
+WORKDIR /app
 
 # Copy in the source code
 COPY src ./src
-CMD ["python", "src/main.py"]
-EXPOSE $APP_PORT
+
+ENTRYPOINT ["python3", "src/main.py"]

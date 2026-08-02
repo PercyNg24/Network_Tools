@@ -19,13 +19,8 @@ def valid_ip_address(ip):
     return True
 
 def valid_subnet_mask(mask):
-
-    octet = mask.split(".") 
-    if not valid_ip_address(mask): 
-        return False 
-        return False
-    binary_mask = ip_to_binary(mask)  # Convert the subnet mask to binary representation
-
+    valid_ip_address(mask)
+    binary_mask = ip_to_binary(mask)            # Convert the subnet mask to binary representation
     if binary_mask[0] != '1':                   # Mask must start with 1 and may contain only one transition from 1 to 0.
         return False
     first_zero = binary_mask.find('0')
