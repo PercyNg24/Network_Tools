@@ -1,5 +1,3 @@
-
-
 pipeline {
     agent any
 
@@ -19,7 +17,7 @@ pipeline {
 
         stage('Validate Python Syntax') {
             steps {
-                sh 'python3 -m py_compile app/Manual_logic/src/*.py'
+                sh 'python3 -m py_compile app/Manual_logic/src/function_def.py app/Manual_logic/src/main.py'
             }
         }
 
@@ -49,7 +47,9 @@ pipeline {
 
         stage('Build Image') {
             steps {
-                sh 'docker.build("image"+"$BUILD_NUMBER")'
+                sh '''
+                    docker build --pull -f app/Manual_logic/dockerfile -t ${IMAGE_NAME}:${IMAGE_TAG} app/Manual_logic
+                '''
             }
         }
 
@@ -63,7 +63,9 @@ pipeline {
 
         stage('Smoke Test') {
             steps {
-                sh 'printf "24\\n" | python3 app/Manual_logic/src/main.py 192.168.1.10'
+                sh '''
+                    printf "24\\n" | docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} 192.168.1.10
+                '''
             }
         }
     }
@@ -73,10 +75,10 @@ pipeline {
             echo 'Pipeline finished.'
         }
         success {
-            echo 'Docker image built and pushed successfully.'
+            echo '✅ Docker image built and pushed successfully.'
         }
         failure {
-            echo 'Pipeline failed. Check Jenkins logs.'
+            echo '❌ Pipeline failed. Check Jenkins logs.'
         }
     }
 }
