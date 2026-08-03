@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'IP_ADDRESS', defaultValue: '192.168.1.12', description: 'IP address to analyze')
+        string(name: 'SUBNET_MASK', defaultValue: '/24', description: 'Subnet mask in CIDR format, for example /24')
+    }
+
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker_creds')
         IMAGE_NAME = 'percyng24062024/network-tools'
@@ -59,7 +64,7 @@ pipeline {
         stage('Smoke Test') {
             steps {
                 sh '''
-                    printf "24\\n" | docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} 192.168.1.10
+                    printf '%s\n' "${SUBNET_MASK}" | docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} "${IP_ADDRESS}"
                 '''
             }
         }
