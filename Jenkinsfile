@@ -27,18 +27,6 @@ pipeline {
             }
         }
 
-        stage('Check Docker') {
-            steps {
-                sh '''
-                    echo "$PATH"
-                    command -v docker || exit 1
-                    ls -l /opt/homebrew/bin/docker /usr/local/bin/docker 2>/dev/null || true
-                    docker --version || exit 1
-                    docker info || exit 1
-                '''
-            }
-        }
-
         stage('Docker Login') {
             steps {
                 sh '''
