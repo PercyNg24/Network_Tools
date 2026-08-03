@@ -47,16 +47,10 @@ pipeline {
             }
         }
 
-        stage('Pull Base Image') {
-            steps {
-                sh 'docker pull python:3.13-alpine3.20'
-            }
-        }
-
         stage('Build Image') {
             steps {
                 sh '''
-                    docker build --pull -f app/Manual_logic/dockerfile \
+                    docker build -f app/Manual_logic/dockerfile \
                         -t ${IMAGE_NAME}:${IMAGE_TAG} \
                         app/Manual_logic
                 '''
