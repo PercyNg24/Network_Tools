@@ -48,14 +48,14 @@ pipeline {
         stage('Run Container') {
             steps {
                 echo "Running container with IP ${params.IP_ADDRESS} and subnet ${params.SUBNET_MASK}"
-                sh '''
+                sh """
                     set +e
-                    CONTAINER_NAME="network-tools-${BUILD_NUMBER}"
-                    docker run --name "$CONTAINER_NAME" ${IMAGE_NAME}:${IMAGE_TAG} '${params.IP_ADDRESS}' '${params.SUBNET_MASK}'
-                    status=$?
-                    docker rm -f "$CONTAINER_NAME" || true
-                    exit $status
-                '''
+                    CONTAINER_NAME=\"network-tools-${BUILD_NUMBER}\"
+                    docker run --name \"\$CONTAINER_NAME\" ${IMAGE_NAME}:${IMAGE_TAG} '${params.IP_ADDRESS}' '${params.SUBNET_MASK}'
+                    status=\$?
+                    docker rm -f \"\$CONTAINER_NAME\" || true
+                    exit \$status
+                """
             }
         }
     }
