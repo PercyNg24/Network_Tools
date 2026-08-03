@@ -10,6 +10,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('docker_creds')
         IMAGE_NAME = 'percyng24062024/network-tools'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
+        LATEST_TAG = 'latest'
         PATH = "/usr/local/bin:${env.PATH}" 
     }
 
@@ -49,14 +50,34 @@ pipeline {
 
         stage('Pull Base Image') {
             steps {
-                sh 'docker pull python:3.13.14-slim'
+                sh 'docker pull python:3.13-alpine3.20'
             }
         }
 
         stage('Build Image') {
             steps {
                 sh '''
-                    docker build --pull -f app/Manual_logic/dockerfile -t ${IMAGE_NAME}:${IMAGE_TAG} app/Manual_logic
+                    docker build --pull -f app/Manual_logic/dockerfile \
+                        -t ${IMAGE_NAME}:${IMAGE_TAG} \
+                        -t ${IMAGE_NAME}:${LATEST_TAG} \
+                        app/Manual_logic
+                '''
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                sh '''
+                    docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                    docker push ${IMAGE_NAME}:${LATEST_TAG}
+                '''
+            }
+        }
+
+        stage('Pull Published Image') {
+            steps {
+                sh '''
+                    docker pull ${IMAGE_NAME}:${LATEST_TAG}
                 '''
             }
         }
@@ -76,7 +97,7 @@ pipeline {
             echo 'Pipeline finished.'
         }
         success {
-            echo '✅ Docker image built and run successfully.'
+            echo '✅ Docker image built, pushed, and run successfully.'
         }
         failure {
             echo '❌ Pipeline failed. Check Jenkins logs.'
