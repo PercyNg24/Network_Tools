@@ -13,6 +13,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out repository'
+                git branch: 'main', credentialsId: 'docker_creds', url: 'https://github.com/PercyNg24/Network_Tools.git'
             }
         }
 
@@ -24,7 +25,11 @@ pipeline {
 
         stage('Check Docker') {
             steps {
-                sh 'which docker && docker --version && docker info'
+                sh '''
+                    which docker || exit 1
+                    docker --version || exit 1
+                    docker info || exit 1
+                '''
             }
         }
 
@@ -44,9 +49,7 @@ pipeline {
 
         stage('Build Image') {
             steps {
-                sh '''
-                    docker build --pull -f app/Manual_logic/dockerfile -t ${IMAGE_NAME}:${IMAGE_TAG} app/Manual_logic
-                '''
+                sh 'docker.build("image"+"$BUILD_NUMBER")'
             }
         }
 
