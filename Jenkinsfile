@@ -4,13 +4,15 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'network-tools'
+        DOCKERHUB_CREDENTIALS = credentials('docker_creds')
+        IMAGE_NAME = 'percyng24062024/network-tools'
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out source code'
+                echo 'Checking out repository'
             }
         }
 
@@ -20,9 +22,33 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Docker Login') {
             steps {
-                sh 'docker build -f app/Manual_logic/dockerfile -t ${IMAGE_NAME}:latest app/Manual_logic'
+                sh '''
+                    echo "$DOCKERHUB_CREDENTIALS_PSW" | docker login -u "$DOCKERHUB_CREDENTIALS_USR" --password-stdin
+                '''
+            }
+        }
+
+        stage('Pull Base Image') {
+            steps {
+                sh 'docker pull python:3.13.14-slim'
+            }
+        }
+
+        stage('Build Image') {
+            steps {
+                sh '''
+                    docker build --pull -f app/Manual_logic/dockerfile -t ${IMAGE_NAME}:${IMAGE_TAG} app/Manual_logic
+                '''
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                sh '''
+                    docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                '''
             }
         }
 
@@ -35,13 +61,13 @@ pipeline {
 
     post {
         always {
-            echo 'Jenkins pipeline finished.'
+            echo 'Pipeline finished.'
         }
         success {
-            echo 'Pipeline completed successfully.'
+            echo 'Docker image built and pushed successfully.'
         }
         failure {
-            echo 'Pipeline failed. Check the logs for details.'
+            echo 'Pipeline failed. Check Jenkins logs.'
         }
     }
 }
