@@ -5,6 +5,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('docker_creds')
         IMAGE_NAME = 'percyng24062024/network-tools'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
+        PATH = "/usr/local/bin:${env.PATH}" 
     }
 
     stages {
@@ -24,7 +25,9 @@ pipeline {
         stage('Check Docker') {
             steps {
                 sh '''
-                    which docker || exit 1
+                    echo "$PATH"
+                    command -v docker || exit 1
+                    ls -l /opt/homebrew/bin/docker /usr/local/bin/docker 2>/dev/null || true
                     docker --version || exit 1
                     docker info || exit 1
                 '''
