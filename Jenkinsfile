@@ -67,7 +67,7 @@ pipeline {
             steps {
                 echo "Running container with IP ${params.IP_ADDRESS} and subnet ${params.SUBNET_MASK}"
                 sh """
-                    printf '%s\\n' '${params.SUBNET_MASK}' | docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} '${params.IP_ADDRESS}'
+                    docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} '${params.IP_ADDRESS}' '${params.SUBNET_MASK}'
                 """
             }
         }
