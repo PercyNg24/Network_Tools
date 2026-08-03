@@ -63,9 +63,9 @@ pipeline {
             }
         }
 
-        stage('Smoke Test') {
+        stage('Run Container') {
             steps {
-                echo "Running smoke test with IP ${params.IP_ADDRESS} and subnet ${params.SUBNET_MASK}"
+                echo "Running container with IP ${params.IP_ADDRESS} and subnet ${params.SUBNET_MASK}"
                 sh """
                     printf '%s\\n' '${params.SUBNET_MASK}' | docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} '${params.IP_ADDRESS}'
                 """
