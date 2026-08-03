@@ -56,14 +56,6 @@ pipeline {
             }
         }
 
-        stage('Push Image') {
-            steps {
-                sh '''
-                    docker push ${IMAGE_NAME}:${IMAGE_TAG}
-                '''
-            }
-        }
-
         stage('Smoke Test') {
             steps {
                 sh '''
@@ -78,7 +70,7 @@ pipeline {
             echo 'Pipeline finished.'
         }
         success {
-            echo '✅ Docker image built and pushed successfully.'
+            echo '✅ Docker image built and run successfully.'
         }
         failure {
             echo '❌ Pipeline failed. Check Jenkins logs.'
